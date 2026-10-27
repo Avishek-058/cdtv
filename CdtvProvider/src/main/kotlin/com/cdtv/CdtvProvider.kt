@@ -1,3 +1,4 @@
+@file:Suppress("DEPRECATION", "DEPRECATION_ERROR")
 package com.cdtv
 
 import com.lagradost.cloudstream3.*
@@ -47,37 +48,35 @@ class CdtvProvider : MainAPI() {
                 )
             }
         }
-        return HomePageResponse(homeLists)
+        return newHomePageResponse(homeLists)
     }
 
     // ---------------------------------------------------------------
     // Helper: parse a channel <a> element into a LiveSearchResponse
     // ---------------------------------------------------------------
     private fun Element.toSearchResult(): LiveSearchResponse? {
-        // onclick="view.location.href='img/play.php?stream=102'"
         val onclickAttr = this.attr("onclick")
         val streamId = Regex("stream=(\\d+)").find(onclickAttr)?.groupValues?.get(1) ?: return null
 
         val imgSrc = this.selectFirst("img")?.attr("src") ?: ""
         val imgName = imgSrc.substringAfterLast("/").substringBeforeLast(".")
 
-        // Clean up filename into a human-readable channel name
         val channelName = imgName
             .replace(Regex("[_\\-]"), " ")
-            .replace(Regex("\\d{7,}"), "")   // strip epoch timestamps embedded in filenames
+            .replace(Regex("\\d{7,}"), "")
             .trim()
             .split(" ")
             .filter { it.isNotBlank() }
             .joinToString(" ") { word -> word.replaceFirstChar { it.uppercase() } }
             .ifBlank { "Channel $streamId" }
 
-        return LiveSearchResponse(
+        return newLiveSearchResponse(
             name = channelName,
             url = "$mainUrl/img/play.php?stream=$streamId",
-            apiName = this@CdtvProvider.name,
-            type = TvType.Live,
-            posterUrl = fixUrl(imgSrc)
-        )
+            type = TvType.Live
+        ) {
+            this.posterUrl = fixUrl(imgSrc)
+        }
     }
 
     // ---------------------------------------------------------------
@@ -96,20 +95,19 @@ class CdtvProvider : MainAPI() {
     override suspend fun load(url: String): LoadResponse {
         val streamId = Regex("stream=(\\d+)").find(url)?.groupValues?.get(1) ?: ""
 
-        // Look up the channel name from the main page
         val mainDoc = app.get(mainUrl).document
         val channelEl = mainDoc.selectFirst("li a.channel[onclick*='stream=$streamId']")
         val channelName = channelEl?.toSearchResult()?.name ?: "Channel $streamId"
         val posterUrl = channelEl?.selectFirst("img")?.attr("src")?.let { fixUrl(it) }
 
-        return LiveStreamLoadResponse(
+        return newLiveStreamLoadResponse(
             name = channelName,
             url = url,
-            apiName = this.name,
-            dataUrl = streamId,   // passed as `data` into loadLinks
-            posterUrl = posterUrl,
-            plot = "Live TV via BDIX (30.30.30.30) - Stream ID: $streamId"
-        )
+            dataUrl = streamId
+        ) {
+            this.posterUrl = posterUrl
+            this.plot = "Live TV via BDIX (30.30.30.30) - Stream ID: $streamId"
+        }
     }
 
     // ---------------------------------------------------------------
@@ -123,7 +121,6 @@ class CdtvProvider : MainAPI() {
     ): Boolean {
         val streamId = data.trim()
 
-        // Primary: direct HLS from Flussonic (no token required on BDIX)
         callback.invoke(
             ExtractorLink(
                 source = name,
@@ -135,7 +132,6 @@ class CdtvProvider : MainAPI() {
             )
         )
 
-        // Fallback: tokenized HLS URL from the play.php embed iframe
         try {
             val playPage = app.get("$mainUrl/img/play.php?stream=$streamId").document
             val iframeSrc = playPage.selectFirst("iframe")?.attr("src") ?: ""
@@ -153,10 +149,8 @@ class CdtvProvider : MainAPI() {
                 )
             }
         } catch (_: Exception) {
-            // Ignore token fetch errors; primary link already provided
         }
 
         return true
     }
 }
-
