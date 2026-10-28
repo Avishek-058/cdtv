@@ -1,0 +1,43 @@
+[
+    {
+        "iconUrl": "http://30.30.30.30/assets/images/live.png",
+        "fileHash": "sha256-9dbc68e152c61d3a0e47737211fe15c3bf88aa14ac6f31d7f8676ebb584e2341",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/Avishek-058/cdtv",
+        "fileSize": 11136,
+        "status": 1,
+        "language": "bn",
+        "authors": [
+            "Avishek-058"
+        ],
+        "tvTypes": [
+            "Live"
+        ],
+        "version": 1,
+        "internalName": "CdtvProvider",
+        "description": "BDIX Live TV - Watch live Sports, Bangla, Hindi, English and other channels via the local BDIX network at 30.30.30.30",
+        "url": "https://raw.githubusercontent.com/Avishek-058/cdtv/builds/CdtvProvider.cs3",
+        "name": "CdtvProvider"
+    },
+    {
+        "iconUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2f/Korduene_Logo.png",
+        "fileHash": "sha256-800296fa8268958342fd3e92516082534bda91e51855b725d872959d0e75421f",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/Avishek-058/cdtv",
+        "fileSize": 7311,
+        "status": 1,
+        "language": "en",
+        "authors": [
+            "Cloudburst",
+            "Luna712"
+        ],
+        "tvTypes": [
+            "Movie"
+        ],
+        "version": 1,
+        "internalName": "ExampleProvider",
+        "description": "Lorem ipsum",
+        "url": "https://raw.githubusercontent.com/Avishek-058/cdtv/builds/ExampleProvider.cs3",
+        "name": "ExampleProvider"
+    }
+]
