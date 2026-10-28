@@ -24,10 +24,10 @@ Live streaming of Bangladeshi and satellite TV channels via the BDIX local netwo
 
 1. Open **CloudStream 3** on your Android device
 2. Go to **Settings → Extensions → Add repository**
-3. Paste this URL:
+3. Paste this Repository URL:
 
 ```
-https://raw.githubusercontent.com/Avishek-058/cdtv/builds/plugins.json
+https://raw.githubusercontent.com/Avishek-058/cdtv/builds/repo.json
 ```
 
 ---

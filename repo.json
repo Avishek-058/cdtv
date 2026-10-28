@@ -1,0 +1,8 @@
+{
+  "name": "CDTV",
+  "description": "BDIX Live TV channels via 30.30.30.30",
+  "manifestVersion": 1,
+  "pluginLists": [
+    "https://raw.githubusercontent.com/Avishek-058/cdtv/builds/plugins.json"
+  ]
+}
